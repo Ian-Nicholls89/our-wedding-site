@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marilyn & Ian | Wedding</title>
+    <title>Marilyn & Ian | Wedding 2027</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=map_pin_heart" />
     <script>
         const rsvpOpen = false;
@@ -525,6 +525,7 @@
             <p class="date">JUNE 19, 2027</p>
             <p class="location">Larmer Tree Gardens | Tollard Royal, England, SP5 5PY</p>
             <p class="pin"><a href="https://maps.app.goo.gl/KDg1wauDmnFXBdUB7"><span class="material-symbols-outlined">map_pin_heart</span></a></p>
+            <p class="pin"><a id="wedding-link">Save the date!</a></p>
         </div>
         <div class="scroll-indicator"></div>
     </section>
@@ -655,6 +656,46 @@
     </footer>
 
     <script>
+        // Save the date handler
+        function generateWeddingICS() {
+    const wedding = {
+        title: "Wedding of Marilyn and Ian",
+        description: "We are so excited to celebrate our wedding day with you at the Larmer Tree Gardens. See you there!",
+        location: "Larmer Tree Gardens, Salisbury SP5 5PY, UK",
+        startDate: "20270619", // June 19th, 2027
+        endDate: "20270620",   // All-day events end the following day
+        alarmTrigger: "-P7D"   // 7-day reminder
+    };
+
+    const icsContent = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Wedding Planner//EN",
+        "BEGIN:VEVENT",
+        `DTSTART;VALUE=DATE:${wedding.startDate}`,
+        `DTEND;VALUE=DATE:${wedding.endDate}`,
+        `SUMMARY:${wedding.title}`,
+        `DESCRIPTION:${wedding.description}`,
+        `LOCATION:${wedding.location}`,
+        "BEGIN:VALARM",
+        "TRIGGER:-P7D",
+        "ACTION:DISPLAY",
+        `DESCRIPTION:Reminder: Marilyn and Ian's wedding is in one week!`,
+        "END:VALARM",
+        "END:VEVENT",
+        "END:VCALENDAR"
+    ].join("\n");
+
+    const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.getElementById("wedding-link");
+    link.href = url;
+    link.download = "Wedding-Marilyn-and-Ian.ics";
+}
+
+window.onload = generateWeddingICS;
+
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -705,7 +746,7 @@
                 // After wedding - show everything
                 document.getElementById('photos').classList.remove('hidden');
                 document.getElementById('navPhotos').classList.remove('hidden');
-                // Hide RSVP - only weirdos would use this
+                // Hide RSVP - only weirdos would use this after the wedding 
                 document.getElementById('navRSVP').classList.add('hidden');
                 document.getElementById('rsvp').classList.add('hidden');
             } else {
