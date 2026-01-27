@@ -6,7 +6,7 @@
     <title>Marilyn & Ian | Wedding 2027</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=calendar_add_on,map_pin_heart" />
     <script>
-        const rsvpOpen = false;
+        const rsvpOpen = true;
     </script>
     <style>
         * {
@@ -502,6 +502,51 @@
                 transform: translateX(-50%);
             }
         }
+
+        /* Meal Selection Grid */
+        .meal-grid {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .meal-grid th,
+        .meal-grid td {
+            padding: 0.8rem;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .meal-grid th {
+            background-color: #f0f8f8;
+            color: #2c7873;
+            font-weight: 500;
+        }
+
+        .meal-grid td:first-child {
+            text-align: left;
+            font-weight: 500;
+            background-color: #f9f9f9;
+            color: #2c7873;
+        }
+
+        .meal-grid input[type="radio"],
+        .meal-grid input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .meal-grid input[type="text"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 0.9rem;
+        }
+
+        .guest-name-cell {
+            min-width: 150px;
+        }
     </style>
 </head>
 <body>
@@ -616,22 +661,8 @@
         <div class="rsvp-form">
             <form id="rsvpForm">
                 <div class="form-group">
-                    <label for="name">Full Name(s)</label>
+                    <label for="name">Full Name</label>
                     <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="guests">Number of Guests</label>
-                    <select id="guests" name="guests" required>
-                        <option value="">Select...</option>
-                        <option value="1">1 Guest</option>
-                        <option value="2">2 Guests</option>
-                        <option value="3">3 Guests</option>
-                        <option value="4">4 Guests</option>
-                    </select>
                 </div>
                 <div class="form-group">
                     <label for="attendance">Will you be attending?</label>
@@ -641,11 +672,74 @@
                         <option value="no">Regretfully Decline</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="dietary">Dietary Requirements</label>
-                    <textarea id="dietary" name="dietary" placeholder="Please let us know of any allergies or dietary restrictions"></textarea>
+                <div class="form-group" id="guestsGroup" style="display: none;">
+                    <label for="guests">Number of Attendees (including you)</label>
+                    <select id="guests" name="guests">
+                        <option value="">Select...</option>
+                        <option value="1">1 (just you)</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+                <div class="form-group" id="guestNamesGroup" style="display: none;">
+                    <label>Names of additional guests in your party (please include surname):</label>
+                    <div id="guestNamesContainer" style="margin-top: 0.5rem;">
+                        <!-- Text boxes will be dynamically generated here -->
+                    </div>
+                </div>
+                <div class="form-group" id="dietaryRestrictionsGroup" style="display: none;">
+                    <label style="margin-bottom: 1rem; display: block;">
+                        Do you have any dietary choices/restrictions or allergies in your party we should be aware of?
+                    </label>
+                    <div style="overflow-x: auto;">
+                        <table class="meal-grid" id="dietaryRestrictionsTable">
+                            <!-- Table will be dynamically generated -->
+                        </table>
+                    </div>
+                </div>
+                <div class="form-group" id="dietaryDetailsGroup" style="display: none;">
+                    <label for="dietaryDetails">Please specify the 'Other' dietary restrictions/allergies:</label>
+                    <textarea id="dietaryDetails" name="dietaryDetails" placeholder="e.g., John Smith - egg allergy, Jane Smith - lactose intolerant"></textarea>
+                </div>
+                <div class="form-group" id="mealSelectionGroup" style="display: none;">
+                    <label style="margin-bottom: 1rem; display: block;">
+                        <span style="color: #d9534f; font-weight: bold;">TBC:</span> Please select your main course preference:
+                    </label>
+                    <div style="overflow-x: auto;">
+                        <table class="meal-grid" id="mealSelectionTable">
+                            <!-- Table will be dynamically generated -->
+                        </table>
+                    </div>
+                </div>
+                <div class="form-group" id="stayingOvernightGroup" style="display: none;">
+                    <label for="stayingOvernight">Are you thinking of staying overnight at Larmer Tree?</label>
+                    <select id="stayingOvernight" name="stayingOvernight">
+                        <option value="">Select...</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+                <div class="form-group" id="accommodationGroup" style="display: none;">
+                    <label for="accommodation">Where are you planning to sleep?</label>
+                    <select id="accommodation" name="accommodation">
+                        <option value="">Select...</option>
+                        <option value="yurt">I would like information about hiring a glamping yurt</option>
+                        <option value="tent">My own tent/caravan/campervan</option>
+                    </select>
+                </div>
+                <div class="form-group" id="songRequestGroup" style="display: none;">
+                    <label for="songRequest">Finally: What song is likely to get you on the dancefloor?</label>
+                    <input type="text" id="songRequest" name="songRequest" placeholder="song name by artist">
                 </div>
                 <button type="submit" class="btn">Submit RSVP</button>
+                <!-- investigate submitting to an online spreadsheet-->
             </form>
         </div>
     </section>
@@ -659,43 +753,43 @@
     <script>
         // Save the date handler
         function generateWeddingICS() {
-    const wedding = {
-        title: "Wedding of Marilyn and Ian",
-        description: "We are so excited to celebrate our wedding day with you at the Larmer Tree Gardens. See you there!",
-        location: "Larmer Tree Gardens, Salisbury SP5 5PY, UK",
-        startDate: "20270619", // June 19th, 2027
-        endDate: "20270620",   // All-day events end the following day
-        alarmTrigger: "-P7D"   // 7-day reminder
-    };
+            const wedding = {
+                title: "Wedding of Marilyn and Ian",
+                description: "We are so excited to celebrate our wedding day with you at the Larmer Tree Gardens. See you there!",
+                location: "Larmer Tree Gardens, Salisbury SP5 5PY, UK",
+                startDate: "20270619", // date in ISO format YYYYMMDD because coding is for weirdos
+                endDate: "20270620",   // end the day after to make it all day
+                alarmTrigger: "-P7D"   // remind 7 days before
+            };
 
-    const icsContent = [
-        "BEGIN:VCALENDAR",
-        "VERSION:2.0",
-        "PRODID:-//Wedding Planner//EN",
-        "BEGIN:VEVENT",
-        `DTSTART;VALUE=DATE:${wedding.startDate}`,
-        `DTEND;VALUE=DATE:${wedding.endDate}`,
-        `SUMMARY:${wedding.title}`,
-        `DESCRIPTION:${wedding.description}`,
-        `LOCATION:${wedding.location}`,
-        "BEGIN:VALARM",
-        "TRIGGER:-P7D",
-        "ACTION:DISPLAY",
-        `DESCRIPTION:Reminder: Marilyn and Ian's wedding is in one week!`,
-        "END:VALARM",
-        "END:VEVENT",
-        "END:VCALENDAR"
-    ].join("\n");
+            const icsContent = [
+                "BEGIN:VCALENDAR",
+                "VERSION:2.0",
+                "PRODID:-//Wedding Planner//EN",
+                "BEGIN:VEVENT",
+                `DTSTART;VALUE=DATE:${wedding.startDate}`,
+                `DTEND;VALUE=DATE:${wedding.endDate}`,
+                `SUMMARY:${wedding.title}`,
+                `DESCRIPTION:${wedding.description}`,
+                `LOCATION:${wedding.location}`,
+                "BEGIN:VALARM",
+                "TRIGGER:-P7D",
+                "ACTION:DISPLAY",
+                `DESCRIPTION:Reminder: Marilyn and Ian's wedding is in one week!`,
+                "END:VALARM",
+                "END:VEVENT",
+                "END:VCALENDAR"
+            ].join("\n");
 
-    const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
+            const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
 
-    const link = document.getElementById("wedding-link");
-    link.href = url;
-    link.download = "Wedding-Marilyn-and-Ian.ics";
-}
+            const link = document.getElementById("wedding-link");
+            link.href = url;
+            link.download = "Wedding-Marilyn-and-Ian.ics";
+        }
 
-window.onload = generateWeddingICS;
+        window.onload = generateWeddingICS; // create the ICS on page load even if its not used
 
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -711,9 +805,332 @@ window.onload = generateWeddingICS;
             });
         });
 
+        // Show/hide guests field based on attendance
+        function toggleGuestsField() {
+            const attendanceSelect = document.getElementById('attendance');
+            const guestsGroup = document.getElementById('guestsGroup');
+            const guestsSelect = document.getElementById('guests');
+            const stayingOvernightGroup = document.getElementById('stayingOvernightGroup');
+            const stayingOvernightSelect = document.getElementById('stayingOvernight');
+            const accommodationGroup = document.getElementById('accommodationGroup');
+            const accommodationSelect = document.getElementById('accommodation');
+            const songRequestGroup = document.getElementById('songRequestGroup');
+            const songRequestInput = document.getElementById('songRequest');
+            
+            if (attendanceSelect.value === 'yes') {
+                guestsGroup.style.display = 'block';
+                guestsSelect.required = true;
+                stayingOvernightGroup.style.display = 'block';
+                stayingOvernightSelect.required = true;
+                songRequestGroup.style.display = 'block';
+            } else {
+                guestsGroup.style.display = 'none';
+                guestsSelect.value = ''; // Reset guests selection
+                guestsSelect.required = false;
+                generateGuestNameFields(); // Update guest name fields
+                generateMealSelectionGrid(); // Update meal grid
+                
+                // Hide and reset staying overnight and accommodation
+                stayingOvernightGroup.style.display = 'none';
+                stayingOvernightSelect.value = '';
+                stayingOvernightSelect.required = false;
+                accommodationGroup.style.display = 'none';
+                accommodationSelect.value = '';
+                accommodationSelect.required = false;
+                
+                // Hide and reset song request
+                songRequestGroup.style.display = 'none';
+                songRequestInput.value = '';
+                songRequestInput.required = false;
+            }
+        }
+
+        // Generate guest name text boxes
+        function generateGuestNameFields() {
+            const guestsSelect = document.getElementById('guests');
+            const guestNamesGroup = document.getElementById('guestNamesGroup');
+            const guestNamesContainer = document.getElementById('guestNamesContainer');
+            const numGuests = parseInt(guestsSelect.value);
+
+            // Show guest name fields only if more than 1 attendee
+            if (numGuests > 1) {
+                guestNamesGroup.style.display = 'block';
+                
+                let fieldsHTML = '';
+                // Generate text boxes for additional guests (excluding the main person)
+                for (let i = 1; i < numGuests; i++) {
+                    fieldsHTML += `
+                        <div style="margin-bottom: 0.8rem;">
+                            <input type="text"
+                                   id="guestName_${i}"
+                                   name="guestName_${i}"
+                                   placeholder="Guest ${i} full name"
+                                   style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;"
+                                   required>
+                        </div>
+                    `;
+                }
+                guestNamesContainer.innerHTML = fieldsHTML;
+            } else {
+                guestNamesGroup.style.display = 'none';
+                guestNamesContainer.innerHTML = '';
+            }
+        }
+
+        // Dynamic Meal Selection Grid
+        function generateMealSelectionGrid() {
+            const nameInput = document.getElementById('name');
+            const guestsSelect = document.getElementById('guests');
+            const attendanceSelect = document.getElementById('attendance');
+            const mealSelectionGroup = document.getElementById('mealSelectionGroup');
+            const mealSelectionTable = document.getElementById('mealSelectionTable');
+
+            const name = nameInput.value.trim();
+            const numGuests = parseInt(guestsSelect.value);
+            const attendance = attendanceSelect.value;
+
+            // Only show meal selection if attending and guests selected
+            if (attendance === 'yes' && numGuests > 0 && name) {
+                mealSelectionGroup.style.display = 'block';
+
+                // Generate table
+                let tableHTML = `
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Chicken (Poultry)</th>
+                            <th>Beef (Red Meat)</th>
+                            <th>Fish (Seafood)</th>
+                            <th>Vegetarian</th>
+                            <th>Vegan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                `;
+
+                // First row - use the name from the name field
+                tableHTML += `
+                    <tr>
+                        <td class="guest-name-cell">${name}</td>
+                        <td><input type="radio" name="meal_0" value="chicken" required></td>
+                        <td><input type="radio" name="meal_0" value="beef" required></td>
+                        <td><input type="radio" name="meal_0" value="fish" required></td>
+                        <td><input type="radio" name="meal_0" value="vegetarian" required></td>
+                        <td><input type="radio" name="meal_0" value="vegan" required></td>
+                    </tr>
+                `;
+
+                // Additional rows for guests - use names from guest name inputs
+                for (let i = 1; i < numGuests; i++) {
+                    const guestNameInput = document.getElementById(`guestName_${i}`);
+                    const guestName = guestNameInput ? guestNameInput.value.trim() : '';
+                    const displayName = guestName || `Guest ${i}`;
+                    
+                    tableHTML += `
+                        <tr>
+                            <td class="guest-name-cell">${displayName}</td>
+                            <td><input type="radio" name="meal_${i}" value="chicken" required></td>
+                            <td><input type="radio" name="meal_${i}" value="beef" required></td>
+                            <td><input type="radio" name="meal_${i}" value="fish" required></td>
+                            <td><input type="radio" name="meal_${i}" value="vegetarian" required></td>
+                            <td><input type="radio" name="meal_${i}" value="vegan" required></td>
+                        </tr>
+                    `;
+                }
+
+                tableHTML += `
+                    </tbody>
+                `;
+
+                mealSelectionTable.innerHTML = tableHTML;
+            } else {
+                mealSelectionGroup.style.display = 'none';
+            }
+        }
+
+        // Dynamic Dietary Restrictions Grid
+        function generateDietaryRestrictionsGrid() {
+            const nameInput = document.getElementById('name');
+            const guestsSelect = document.getElementById('guests');
+            const attendanceSelect = document.getElementById('attendance');
+            const dietaryRestrictionsGroup = document.getElementById('dietaryRestrictionsGroup');
+            const dietaryRestrictionsTable = document.getElementById('dietaryRestrictionsTable');
+
+            const name = nameInput.value.trim();
+            const numGuests = parseInt(guestsSelect.value);
+            const attendance = attendanceSelect.value;
+
+            // Only show dietary restrictions if attending and guests selected
+            if (attendance === 'yes' && numGuests > 0 && name) {
+                dietaryRestrictionsGroup.style.display = 'block';
+
+                // Generate table
+                let tableHTML = `
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>None</th>
+                            <th>Gluten-Free</th>
+                            <th>Dairy-Free</th>
+                            <th>Nut Allergy</th>
+                            <th>Shellfish Allergy</th>
+                            <th>Vegan</th>
+                            <th>Vegetarian</th>
+                            <th>Other</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                `;
+
+                // First row - use the name from the name field
+                tableHTML += `
+                    <tr>
+                        <td class="guest-name-cell">${name}</td>
+                        <td><input type="checkbox" name="dietary_0_none" value="none"></td>
+                        <td><input type="checkbox" name="dietary_0_gluten" value="gluten-free"></td>
+                        <td><input type="checkbox" name="dietary_0_dairy" value="dairy-free"></td>
+                        <td><input type="checkbox" name="dietary_0_nut" value="nut-allergy"></td>
+                        <td><input type="checkbox" name="dietary_0_shellfish" value="shellfish-allergy"></td>
+                        <td><input type="checkbox" name="dietary_0_vegan" value="vegan"></td>
+                        <td><input type="checkbox" name="dietary_0_vegetarian" value="vegetarian"></td>
+                        <td><input type="checkbox" name="dietary_0_other" value="other"></td>
+                    </tr>
+                `;
+
+                // Additional rows for guests
+                for (let i = 1; i < numGuests; i++) {
+                    const guestNameInput = document.getElementById(`guestName_${i}`);
+                    const guestName = guestNameInput ? guestNameInput.value.trim() : '';
+                    const displayName = guestName || `Guest ${i}`;
+                    
+                    tableHTML += `
+                        <tr>
+                            <td class="guest-name-cell">${displayName}</td>
+                            <td><input type="checkbox" name="dietary_${i}_none" value="none"></td>
+                            <td><input type="checkbox" name="dietary_${i}_gluten" value="gluten-free"></td>
+                            <td><input type="checkbox" name="dietary_${i}_dairy" value="dairy-free"></td>
+                            <td><input type="checkbox" name="dietary_${i}_nut" value="nut-allergy"></td>
+                            <td><input type="checkbox" name="dietary_${i}_shellfish" value="shellfish-allergy"></td>
+                            <td><input type="checkbox" name="dietary_${i}_vegan" value="vegan"></td>
+                            <td><input type="checkbox" name="dietary_${i}_vegetarian" value="vegetarian"></td>
+                            <td><input type="checkbox" name="dietary_${i}_other" value="other"></td>
+                        </tr>
+                    `;
+                }
+
+                tableHTML += `
+                    </tbody>
+                `;
+
+                dietaryRestrictionsTable.innerHTML = tableHTML;
+            } else {
+                dietaryRestrictionsGroup.style.display = 'none';
+            }
+        }
+
+        // Listen for changes to trigger meal selection grid generation
+        document.getElementById('name').addEventListener('input', function() {
+            generateMealSelectionGrid();
+            generateDietaryRestrictionsGrid();
+        });
+        document.getElementById('guests').addEventListener('change', function() {
+            generateGuestNameFields();
+            generateMealSelectionGrid();
+            generateDietaryRestrictionsGrid();
+        });
+        document.getElementById('attendance').addEventListener('change', function() {
+            toggleGuestsField();
+            generateMealSelectionGrid();
+            generateDietaryRestrictionsGrid();
+        });
+
+        // Listen for guest name changes to update both meal selection and dietary restrictions grids
+        document.getElementById('guestNamesContainer').addEventListener('input', function(e) {
+            if (e.target.id && e.target.id.startsWith('guestName_')) {
+                generateMealSelectionGrid();
+                generateDietaryRestrictionsGrid();
+            }
+        });
+
+        // Show/hide dietary details textarea based on "Other" checkbox selection
+        function toggleDietaryDetails() {
+            const dietaryDetailsGroup = document.getElementById('dietaryDetailsGroup');
+            const dietaryDetailsTextarea = document.getElementById('dietaryDetails');
+            const dietaryTable = document.getElementById('dietaryRestrictionsTable');
+            
+            // Check if any "Other" checkbox is checked
+            const otherCheckboxes = dietaryTable.querySelectorAll('input[name*="_other"]');
+            const anyOtherChecked = Array.from(otherCheckboxes).some(checkbox => checkbox.checked);
+            
+            if (anyOtherChecked) {
+                dietaryDetailsGroup.style.display = 'block';
+                dietaryDetailsTextarea.required = true;
+            } else {
+                dietaryDetailsGroup.style.display = 'none';
+                dietaryDetailsTextarea.required = false;
+            }
+        }
+
+        // Listen for changes to dietary restriction checkboxes
+        document.getElementById('dietaryRestrictionsTable').addEventListener('change', function(e) {
+            if (e.target.type === 'checkbox') {
+                toggleDietaryDetails();
+            }
+        });
+
+        // Show/hide accommodation question based on staying overnight selection
+        function toggleAccommodationQuestion() {
+            const stayingOvernightSelect = document.getElementById('stayingOvernight');
+            const accommodationGroup = document.getElementById('accommodationGroup');
+            const accommodationSelect = document.getElementById('accommodation');
+            
+            if (stayingOvernightSelect.value === 'yes') {
+                accommodationGroup.style.display = 'block';
+                accommodationSelect.required = true;
+            } else {
+                accommodationGroup.style.display = 'none';
+                accommodationSelect.value = ''; // Reset accommodation selection
+                accommodationSelect.required = false;
+            }
+        }
+
+        // Listen for changes to staying overnight selection
+        document.getElementById('stayingOvernight').addEventListener('change', toggleAccommodationQuestion);
+
         // RSVP Form submission
         document.getElementById('rsvpForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            // Validate dietary restrictions - at least one checkbox per person
+            const attendanceSelect = document.getElementById('attendance');
+            const guestsSelect = document.getElementById('guests');
+            const numGuests = parseInt(guestsSelect.value);
+            
+            if (attendanceSelect.value === 'yes' && numGuests > 0) {
+                let allValid = true;
+                let invalidGuests = [];
+                
+                for (let i = 0; i < numGuests; i++) {
+                    const checkboxes = document.querySelectorAll(`input[name^="dietary_${i}_"]`);
+                    const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+                    
+                    if (!anyChecked) {
+                        allValid = false;
+                        if (i === 0) {
+                            invalidGuests.push(document.getElementById('name').value);
+                        } else {
+                            const guestNameInput = document.getElementById(`guestName_${i}`);
+                            const guestName = guestNameInput ? guestNameInput.value.trim() : '';
+                            invalidGuests.push(guestName || `Guest ${i}`);
+                        }
+                    }
+                }
+                
+                if (!allValid) {
+                    alert(`Please select at least one dietary option for: ${invalidGuests.join(', ')}`);
+                    return;
+                }
+            }
             
             // Get form data
             const formData = {
@@ -726,7 +1143,11 @@ window.onload = generateWeddingICS;
 
             // Here you would typically send this data to a backend service
             // For now, we'll just show a confirmation
-            alert('Thank you for your RSVP! We look forward to celebrating with you.');
+            if (formData.attendance === 'yes') {
+                alert(`Thanks for your RSVP, ${formData.name}! We are thrilled that you will be joining us with ${formData.guests} guest(s).`);
+            } else {
+                alert(`Thanks for your RSVP, ${formData.name}. We're sorry you can't make it.`);
+            }
             this.reset();
             
             // In production, you might use something like:
