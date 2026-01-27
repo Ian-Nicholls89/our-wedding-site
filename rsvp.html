@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSVP | Marilyn & Ian Wedding 2027</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=calendar_add_on,map_pin_heart" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="index.html#home">Home</a></li>
+        </ul>
+    </nav>
+
+    <!-- RSVP -->
+    <section id="rsvp" style="margin-top: 80px;">
+        <h2>RSVP</h2>
+        <div class="divider"></div>
+        <div class="rsvp-form">
+            <form id="rsvpForm">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="attendance">Will you be attending?</label>
+                    <select id="attendance" name="attendance" required>
+                        <option value="">Select...</option>
+                        <option value="yes">Joyfully Accept</option>
+                        <option value="no">Regretfully Decline</option>
+                    </select>
+                </div>
+                <div class="form-group" id="guestsGroup" style="display: none;">
+                    <label for="guests">Number of Attendees (including you)</label>
+                    <select id="guests" name="guests">
+                        <option value="">Select...</option>
+                        <option value="1">1 (just you)</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+                <div class="form-group" id="guestNamesGroup" style="display: none;">
+                    <label>Names of additional guests in your party (please include surname):</label>
+                    <div id="guestNamesContainer" style="margin-top: 0.5rem;">
+                        <!-- Text boxes will be dynamically generated here -->
+                    </div>
+                </div>
+                <div class="form-group" id="dietaryRestrictionsGroup" style="display: none;">
+                    <label style="margin-bottom: 1rem; display: block;">
+                        Do you have any dietary choices/restrictions or allergies we should be aware of?
+                    </label>
+                    <div style="overflow-x: auto;">
+                        <table class="meal-grid" id="dietaryRestrictionsTable">
+                            <!-- Table will be dynamically generated -->
+                        </table>
+                    </div>
+                </div>
+                <div class="form-group" id="dietaryDetailsGroup" style="display: none;">
+                    <label for="dietaryDetails">Please specify the 'Other' dietary restrictions/allergies:</label>
+                    <textarea id="dietaryDetails" name="dietaryDetails" placeholder="e.g., John Smith - egg allergy, Jane Smith - lactose intolerant"></textarea>
+                </div>
+                <div class="form-group" id="mealSelectionGroup" style="display: none;">
+                    <label style="margin-bottom: 1rem; display: block;">
+                        <span style="color: #d9534f; font-weight: bold;">TBC:</span> Please select your main course preference:
+                    </label>
+                    <div style="overflow-x: auto;">
+                        <table class="meal-grid" id="mealSelectionTable">
+                            <!-- Table will be dynamically generated -->
+                        </table>
+                    </div>
+                </div>
+                <div class="form-group" id="stayingOvernightGroup" style="display: none;">
+                    <label for="stayingOvernight">Are you thinking of staying overnight at Larmer Tree?</label>
+                    <select id="stayingOvernight" name="stayingOvernight">
+                        <option value="">Select...</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+                <div class="form-group" id="accommodationGroup" style="display: none;">
+                    <label for="accommodation">Where are you planning to sleep?</label>
+                    <select id="accommodation" name="accommodation">
+                        <option value="">Select...</option>
+                        <option value="yurt">I would like information about hiring a glamping yurt</option>
+                        <option value="tent">My own tent/caravan/campervan</option>
+                    </select>
+                </div>
+                <div class="form-group" id="songRequestGroup" style="display: none;">
+                    <label for="songRequest">Finally: What song is likely to get you on the dancefloor?</label>
+                    <input type="text" id="songRequest" name="songRequest" placeholder="song name by artist">
+                </div>
+                <button type="submit" class="btn">Submit RSVP</button>
+                <!-- investigate submitting to an online spreadsheet-->
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>We can't wait to celebrate with you!</p>
+        <p style="margin-top: 0.5rem;">&hearts; Marilyn & Ian &hearts;</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
