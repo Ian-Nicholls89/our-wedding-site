@@ -1,5 +1,5 @@
 // RSVP availability control
-const rsvpOpen = False;
+const rsvpOpen = false;
 
 // Save the date handler
 function generateWeddingICS() {
