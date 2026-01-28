@@ -169,8 +169,8 @@ body {
 /* Mobile responsive */
 @media (max-width: 768px) {
     .hero {
-        min-height: 100vh;
-        padding: 3rem 1rem;
+        justify-content: center;
+        padding: 2rem 2rem 6rem 2rem;  /* Less top, more bottom */
     }
     
     .hero-photos-container {
