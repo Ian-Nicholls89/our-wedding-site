@@ -170,7 +170,7 @@ body {
 @media (max-width: 768px) {
     .hero {
         min-height: 100vh;
-        padding: 3rem 2rem;
+        padding: 3rem 1rem;
     }
     
     .hero-photos-container {
