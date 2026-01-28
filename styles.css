@@ -25,7 +25,8 @@ body {
 
 /* Hero Section */
 .hero {
-    height: 100vh;
+    min-height: 100vh;
+    padding: 4rem 2rem;
     background: linear-gradient(135deg, rgba(64, 181, 173, 0.95), rgba(156, 207, 216, 0.95)),
                 url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%239ccfd8" width="1200" height="800"/></svg>');
     background-size: cover;
