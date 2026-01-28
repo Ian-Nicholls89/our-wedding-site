@@ -168,6 +168,11 @@ body {
 
 /* Mobile responsive */
 @media (max-width: 768px) {
+    .hero {
+        min-height: 100vh;
+        padding: 3rem 2rem;
+    }
+    
     .hero-photos-container {
         margin-top: 1.5rem;
         max-width: 350px;
