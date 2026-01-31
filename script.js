@@ -1,8 +1,27 @@
 // RSVP availability control
 const rsvpOpen = false;
 
+// Open location in native maps app
+function openInMaps() {
+    const address = "Larmer Tree Gardens, Tollard Royal, Salisbury SP5 5PY, UK";
+    const encodedAddress = encodeURIComponent(address);
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isAndroid = /Android/.test(navigator.userAgent);
+
+    if (isIOS) {
+        // Apple Maps
+        window.location.href = `maps://maps.apple.com/?daddr=${encodedAddress}`;
+    } else if (isAndroid) {
+        // Google Maps app or fallback to browser
+        window.location.href = `geo:0,0?q=${encodedAddress}`;
+    } else {
+        // Desktop or other - open Google Maps in new tab
+        window.open(`https://maps.app.goo.gl/KDg1wauDmnFXBdUB7`, '_blank');
+    }
+}
+
 // Save the date handler
-function generateWeddingICS() {
+function generateWeddingICS(triggerDownload = false) {
     const wedding = {
         title: "Wedding of Marilyn and Ian",
         description: "We are so excited to celebrate our wedding day with you at the Larmer Tree Gardens. See you there!",
@@ -37,6 +56,15 @@ function generateWeddingICS() {
     const link = document.getElementById("wedding-link");
     link.href = url;
     link.download = "Wedding-Marilyn-and-Ian.ics";
+
+    if (triggerDownload) {
+        const tempLink = document.createElement('a');
+        tempLink.href = url;
+        tempLink.download = "Wedding-Marilyn-and-Ian.ics";
+        document.body.appendChild(tempLink);
+        tempLink.click();
+        document.body.removeChild(tempLink);
+    }
 }
 
 window.onload = function() {
