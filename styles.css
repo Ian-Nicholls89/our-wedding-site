@@ -11,14 +11,6 @@ body {
     background-color: #f0f8f8;
 }
 
-.material-symbols-outlined {
-    font-variation-settings:
-    'FILL' 0,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24
-}
-
 .hidden {
     display: none !important;
 }
@@ -73,36 +65,6 @@ body {
     margin-top: 0.5rem;
     opacity: 0.9;
     animation: fadeInUp 1s ease 0.5s both;
-}
-
-.hero .pin {
-    line-height: 1;
-    margin-top: 0.5rem;
-    opacity: 1;
-    animation: fadeInUp 1s ease 0.7s both;
-    display: inline-block;
-}
-
-.hero .pin a {
-    color: white;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    transition: opacity 0.3s;
-}
-
-.hero .pin a:hover {
-    opacity: 0.8;
-}
-
-.hero .pin .material-symbols-outlined {
-    font-size: 4rem;
-    font-variation-settings:
-    'FILL' 0,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24;
 }
 
 .scroll-indicator {

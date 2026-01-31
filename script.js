@@ -53,10 +53,6 @@ function generateWeddingICS(triggerDownload = false) {
     const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
     const url = URL.createObjectURL(blob);
 
-    const link = document.getElementById("wedding-link");
-    link.href = url;
-    link.download = "Wedding-Marilyn-and-Ian.ics";
-
     if (triggerDownload) {
         const tempLink = document.createElement('a');
         tempLink.href = url;
