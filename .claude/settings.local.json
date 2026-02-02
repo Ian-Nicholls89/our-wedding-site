@@ -1,7 +1,18 @@
 {
   "permissions": {
     "allow": [
-      "WebSearch"
+      "WebSearch",
+      "Bash(git pull:*)",
+      "Bash(powershell -Command \"$content = Get-Content wedding.ics; $content | Set-Content wedding.ics\")",
+      "Bash(powershell -Command 'Get-Content wedding.ics | Set-Content -Encoding ASCII wedding_new.ics; Move-Item -Force wedding_new.ics wedding.ics')",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push)",
+      "Bash(powershell -Command 'Get-Content wedding.ics | ForEach-Object { \"\"$\\($_.Length\\): $_\"\" }')",
+      "Bash(powershell -Command '[System.IO.File]::WriteAllText\\(\\\\\"\"wedding.ics\\\\\"\", \\([System.IO.File]::ReadAllText\\(\\\\\"\"wedding.ics\\\\\"\"\\) -replace \\\\\"\"`r`n\\\\\"\", \\\\\"\"`n\\\\\"\" -replace \\\\\"\"`n\\\\\"\", \\\\\"\"`r`n\\\\\"\"\\)\\)')",
+      "Bash(powershell -Command:*)",
+      "Bash(powershell -File - <<'PSEOF'\n$content = Get-Content wedding.ics -Raw\n$content = $content -replace \"`r`n\", \"`n\"\n$content = $content -replace \"`n\", \"`r`n\"\n[System.IO.File]::WriteAllText\\(\"wedding.ics\", $content\\)\nPSEOF)",
+      "Bash(git rm:*)"
     ],
     "deny": [],
     "ask": []

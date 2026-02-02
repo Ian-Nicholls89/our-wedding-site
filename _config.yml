@@ -1,5 +1,0 @@
-include:
-  - "*.ics"
-
-mime_types:
-  ".ics": "text/calendar"
