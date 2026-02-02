@@ -3,7 +3,7 @@
 // ============================================
 const WEDDING_CONFIG = {
     date: new Date('2027-06-19'),
-    rsvpOpen: false,
+    rsvpOpen: true,
     rsvpCloseDaysBeforeWedding: 42  // 6 weeks
 };
 
