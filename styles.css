@@ -352,6 +352,26 @@ button:active {
     border-radius: 10px;
 }
 
+.rsvp-placeholder {
+    max-width: 500px;
+    margin: 2rem auto;
+    background: white;
+    padding: 2.5rem;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.rsvp-placeholder h3 {
+    color: #2c7873;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.rsvp-placeholder p {
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
 .form-group {
     margin-bottom: 1.5rem;
 }

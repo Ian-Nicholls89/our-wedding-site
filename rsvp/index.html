@@ -20,7 +20,26 @@
     <section id="rsvp" style="margin-top: 80px;">
         <h2>RSVP</h2>
         <div class="divider"></div>
-        <div class="rsvp-form">
+
+        <!-- Placeholder messages when form is not available -->
+        <div id="rsvpNotOpen" class="rsvp-placeholder hidden">
+            <h3>Hey there early bird!</h3>
+            <p>How did you find us? The RSVP form isn't open just yet, but you won't have to wait long!</p>
+            <p>Check back soon for updates.</p>
+        </div>
+
+        <div id="rsvpClosed" class="rsvp-placeholder hidden">
+            <h3>RSVPs are now closed</h3>
+            <p>If you still need to let us know about your attendance, please contact us directly.</p>
+            <p>We can't wait to see you!</p>
+        </div>
+
+        <div id="rsvpAfterWedding" class="rsvp-placeholder hidden">
+            <img src="https://media.giphy.com/media/jUwpNzg9IcyrK/giphy.gif" alt="Ferris Bueller - Go Home" style="max-width: 100%; border-radius: 10px;">
+            <p style="margin-top: 1rem; font-style: italic;">"You're still here? It's over. Go home. Go."</p>
+        </div>
+
+        <div class="rsvp-form" id="rsvpForm-container">
             <form id="rsvpForm">
                 <div class="form-group">
                     <label for="name">Full Name</label>
@@ -105,6 +124,44 @@
             </form>
         </div>
     </section>
+
+    <script>
+    // Check RSVP availability and show appropriate content
+    function checkRSVPAvailability() {
+        const weddingDate = new Date('2027-06-19');
+        const currentDate = new Date();
+        const sixWeeksBeforeWedding = new Date(weddingDate);
+        sixWeeksBeforeWedding.setDate(weddingDate.getDate() - 42);
+
+        const formContainer = document.getElementById('rsvpForm-container');
+        const notOpenMsg = document.getElementById('rsvpNotOpen');
+        const closedMsg = document.getElementById('rsvpClosed');
+        const afterWeddingMsg = document.getElementById('rsvpAfterWedding');
+
+        // Hide all by default
+        if (formContainer) formContainer.classList.add('hidden');
+        if (notOpenMsg) notOpenMsg.classList.add('hidden');
+        if (closedMsg) closedMsg.classList.add('hidden');
+        if (afterWeddingMsg) afterWeddingMsg.classList.add('hidden');
+
+        if (currentDate >= weddingDate) {
+            // After wedding - show Ferris Bueller
+            if (afterWeddingMsg) afterWeddingMsg.classList.remove('hidden');
+        } else if (currentDate >= sixWeeksBeforeWedding) {
+            // Within 6 weeks of wedding - RSVPs closed
+            if (closedMsg) closedMsg.classList.remove('hidden');
+        } else if (typeof rsvpOpen !== 'undefined' && rsvpOpen === true) {
+            // RSVP is open - show form
+            if (formContainer) formContainer.classList.remove('hidden');
+        } else {
+            // RSVP not open yet - show early bird message
+            if (notOpenMsg) notOpenMsg.classList.remove('hidden');
+        }
+    }
+
+    // Run on page load
+    document.addEventListener('DOMContentLoaded', checkRSVPAvailability);
+    </script>
 
     <!-- Footer -->
     <footer>
