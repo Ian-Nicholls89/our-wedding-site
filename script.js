@@ -1,5 +1,5 @@
 // RSVP availability control
-const rsvpOpen = false;
+const rsvpOpen = true;
 
 // Open location in native maps app
 function openInMaps() {
