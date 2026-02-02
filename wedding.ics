@@ -1,0 +1,18 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Marilyn and Ian Wedding//EN
+METHOD:PUBLISH
+CALSCALE:GREGORIAN
+X-WR-CALNAME:Marilyn and Ian Wedding
+BEGIN:VEVENT
+UID:wedding-2027-marilyn-ian@aramnicholls.wedding
+DTSTAMP:20250201T120000Z
+DTSTART;VALUE=DATE:20270619
+DTEND;VALUE=DATE:20270620
+SUMMARY:Wedding of Marilyn and Ian
+DESCRIPTION:We are so excited to celebrate our wedding day with you at Larmer Tree Gardens. See you there!
+LOCATION:Larmer Tree Gardens\, Tollard Royal\, Salisbury SP5 5PY\, UK
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+END:VEVENT
+END:VCALENDAR

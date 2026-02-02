@@ -20,51 +20,19 @@ function openInMaps() {
     }
 }
 
-// Save the date handler
-function generateWeddingICS(triggerDownload = false) {
-    const wedding = {
-        title: "Wedding of Marilyn and Ian",
-        description: "We are so excited to celebrate our wedding day with you at the Larmer Tree Gardens. See you there!",
-        location: "Larmer Tree Gardens, Salisbury SP5 5PY, UK",
-        startDate: "20270619", // date in ISO format YYYYMMDD because coding is for weirdos
-        endDate: "20270620",   // end the day after to make it all day
-        alarmTrigger: "-P7D"   // remind 7 days before
-    };
+// Calendar subscription URL - update this if your hosting URL changes
+const CALENDAR_URL = 'https://aramnicholls.wedding/wedding.ics';
 
-    const icsContent = [
-        "BEGIN:VCALENDAR",
-        "VERSION:2.0",
-        "PRODID:-//Wedding Planner//EN",
-        "BEGIN:VEVENT",
-        `DTSTART;VALUE=DATE:${wedding.startDate}`,
-        `DTEND;VALUE=DATE:${wedding.endDate}`,
-        `SUMMARY:${wedding.title}`,
-        `DESCRIPTION:${wedding.description}`,
-        `LOCATION:${wedding.location}`,
-        "BEGIN:VALARM",
-        "TRIGGER:-P7D",
-        "ACTION:DISPLAY",
-        `DESCRIPTION:Reminder: Marilyn and Ian's wedding is in one week!`,
-        "END:VALARM",
-        "END:VEVENT",
-        "END:VCALENDAR"
-    ].join("\n");
+// Subscribe to wedding calendar
+function subscribeToCalendar() {
+    // Convert https:// to webcal:// for calendar subscription
+    const webcalUrl = CALENDAR_URL.replace('https://', 'webcal://');
 
-    const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-
-    if (triggerDownload) {
-        const tempLink = document.createElement('a');
-        tempLink.href = url;
-        tempLink.download = "Wedding-Marilyn-and-Ian.ics";
-        document.body.appendChild(tempLink);
-        tempLink.click();
-        document.body.removeChild(tempLink);
-    }
+    // Try to open as subscription
+    window.location.href = webcalUrl;
 }
 
 window.onload = function() {
-    generateWeddingICS(); // create the ICS on page load even if its not used
     checkPhotoUploadAvailability(); // check if photo upload should be visible
 };
 
