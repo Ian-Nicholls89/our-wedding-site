@@ -573,35 +573,41 @@ function showErrorMessage() {
     alert('Sorry, there was a problem submitting your RSVP. Please try again, or contact us directly if the problem persists.');
 }
 
-// Photo Upload Date Control
+// Photo Upload Date Control and RSVP visibility
 function checkPhotoUploadAvailability() {
     const weddingDate = new Date('2027-06-19');
     const currentDate = new Date();
+    const sixWeeksBeforeWedding = new Date(weddingDate);
+    sixWeeksBeforeWedding.setDate(weddingDate.getDate() - 42);
 
     const photosSection = document.getElementById('photos');
     const navPhotos = document.getElementById('navPhotos');
     const rsvpSection = document.getElementById('rsvp');
     const navRSVP = document.getElementById('navRSVP');
 
+    // Check if we're on the dedicated RSVP page
+    const isRSVPPage = window.location.pathname.includes('/rsvp');
+
     // Show upload section if current date is on or after wedding date
     if (currentDate >= weddingDate) {
-        // After wedding - show everything
+        // After wedding - show photos
         if (photosSection) photosSection.classList.remove('hidden');
         if (navPhotos) navPhotos.classList.remove('hidden');
-        // Hide RSVP - only weirdos would use this after the wedding
+        // Hide RSVP nav link
         if (navRSVP) navRSVP.classList.add('hidden');
-        if (rsvpSection) rsvpSection.classList.add('hidden');
+        // Only hide RSVP section on main page, not on dedicated RSVP page
+        if (rsvpSection && !isRSVPPage) rsvpSection.classList.add('hidden');
     } else {
-        // Hide RSVP section either if its not needed yet or automatically 6 weeks before wedding - people will probably tell us without the site around then anyway
-        const sixWeeksBeforeWedding = new Date(weddingDate);
-        sixWeeksBeforeWedding.setDate(weddingDate.getDate() - 42);
-        if (currentDate >= sixWeeksBeforeWedding || rsvpOpen === false) {
-            if (navRSVP) navRSVP.classList.add('hidden');
-            if (rsvpSection) rsvpSection.classList.add('hidden');
-        }
         // Before wedding - hide photos section
         if (photosSection) photosSection.classList.add('hidden');
         if (navPhotos) navPhotos.classList.add('hidden');
+
+        // Hide RSVP nav if not open or within 6 weeks of wedding
+        if (currentDate >= sixWeeksBeforeWedding || rsvpOpen === false) {
+            if (navRSVP) navRSVP.classList.add('hidden');
+            // Only hide RSVP section on main page, not on dedicated RSVP page
+            if (rsvpSection && !isRSVPPage) rsvpSection.classList.add('hidden');
+        }
     }
 }
 
