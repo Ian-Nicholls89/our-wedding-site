@@ -125,13 +125,10 @@
     </section>
 
     <script>
-    // Check RSVP availability and show appropriate content
-    // This runs after script.js loads so rsvpOpen variable is available
-    function checkRSVPAvailability() {
-        const weddingDate = new Date('2027-06-19');
-        const currentDate = new Date();
-        const sixWeeksBeforeWedding = new Date(weddingDate);
-        sixWeeksBeforeWedding.setDate(weddingDate.getDate() - 42);
+    // Show appropriate content based on wedding state
+    // Uses getWeddingState() from script.js for single source of truth
+    function updateRSVPContent() {
+        const state = getWeddingState();
 
         const formContainer = document.getElementById('rsvpForm-container');
         const notOpenMsg = document.getElementById('rsvpNotOpen');
@@ -144,23 +141,26 @@
         if (closedMsg) closedMsg.classList.add('hidden');
         if (afterWeddingMsg) afterWeddingMsg.classList.add('hidden');
 
-        if (currentDate >= weddingDate) {
-            // After wedding - show Ferris Bueller
-            if (afterWeddingMsg) afterWeddingMsg.classList.remove('hidden');
-        } else if (currentDate >= sixWeeksBeforeWedding) {
-            // Within 6 weeks of wedding - RSVPs closed
-            if (closedMsg) closedMsg.classList.remove('hidden');
-        } else if (typeof rsvpOpen !== 'undefined' && rsvpOpen === true) {
-            // RSVP is open - show form
-            if (formContainer) formContainer.classList.remove('hidden');
-        } else {
-            // RSVP not open yet - show early bird message
-            if (notOpenMsg) notOpenMsg.classList.remove('hidden');
+        // Show appropriate content based on state
+        switch (state) {
+            case 'AFTER_WEDDING':
+                if (afterWeddingMsg) afterWeddingMsg.classList.remove('hidden');
+                break;
+            case 'RSVP_CLOSED':
+                if (closedMsg) closedMsg.classList.remove('hidden');
+                break;
+            case 'RSVP_OPEN':
+                if (formContainer) formContainer.classList.remove('hidden');
+                break;
+            case 'RSVP_NOT_YET_OPEN':
+            default:
+                if (notOpenMsg) notOpenMsg.classList.remove('hidden');
+                break;
         }
     }
 
     // Run after window fully loads (including script.js)
-    window.addEventListener('load', checkRSVPAvailability);
+    window.addEventListener('load', updateRSVPContent);
     </script>
 
     <!-- Footer -->

@@ -1,5 +1,43 @@
-// RSVP availability control
-const rsvpOpen = false;
+// ============================================
+// WEDDING CONFIGURATION - Single source of truth
+// ============================================
+const WEDDING_CONFIG = {
+    date: new Date('2027-06-19'),
+    rsvpOpen: false,
+    rsvpCloseDaysBeforeWedding: 42  // 6 weeks
+};
+
+// ============================================
+// STATE HELPERS - Determine what to show/hide
+// ============================================
+
+// Returns current state: 'AFTER_WEDDING', 'RSVP_CLOSED', 'RSVP_OPEN', or 'RSVP_NOT_YET_OPEN'
+function getWeddingState() {
+    const now = new Date();
+    const rsvpCloseDate = new Date(WEDDING_CONFIG.date);
+    rsvpCloseDate.setDate(rsvpCloseDate.getDate() - WEDDING_CONFIG.rsvpCloseDaysBeforeWedding);
+
+    if (now >= WEDDING_CONFIG.date) return 'AFTER_WEDDING';
+    if (now >= rsvpCloseDate) return 'RSVP_CLOSED';
+    if (WEDDING_CONFIG.rsvpOpen) return 'RSVP_OPEN';
+    return 'RSVP_NOT_YET_OPEN';
+}
+
+// Returns visibility flags for all sections
+function getVisibility() {
+    const state = getWeddingState();
+    return {
+        state: state,
+        showRsvpNav: state === 'RSVP_OPEN',
+        showRsvpForm: state === 'RSVP_OPEN',
+        showPhotosNav: state === 'AFTER_WEDDING',
+        showPhotosSection: state === 'AFTER_WEDDING'
+    };
+}
+
+// ============================================
+// PAGE FUNCTIONS
+// ============================================
 
 // Open location in native maps app
 function openInMaps() {
@@ -56,7 +94,7 @@ function generateWeddingICS() {
 }
 
 window.onload = function() {
-    checkPhotoUploadAvailability(); // check if photo upload should be visible
+    updatePageVisibility();
 };
 
 // Smooth scrolling for navigation links
@@ -573,12 +611,9 @@ function showErrorMessage() {
     alert('Sorry, there was a problem submitting your RSVP. Please try again, or contact us directly if the problem persists.');
 }
 
-// Photo Upload Date Control and RSVP visibility
-function checkPhotoUploadAvailability() {
-    const weddingDate = new Date('2027-06-19');
-    const currentDate = new Date();
-    const sixWeeksBeforeWedding = new Date(weddingDate);
-    sixWeeksBeforeWedding.setDate(weddingDate.getDate() - 42);
+// Update page visibility based on wedding state
+function updatePageVisibility() {
+    const visibility = getVisibility();
 
     const photosSection = document.getElementById('photos');
     const navPhotos = document.getElementById('navPhotos');
@@ -588,26 +623,20 @@ function checkPhotoUploadAvailability() {
     // Check if we're on the dedicated RSVP page
     const isRSVPPage = window.location.pathname.includes('/rsvp');
 
-    // Show upload section if current date is on or after wedding date
-    if (currentDate >= weddingDate) {
-        // After wedding - show photos
-        if (photosSection) photosSection.classList.remove('hidden');
-        if (navPhotos) navPhotos.classList.remove('hidden');
-        // Hide RSVP nav link
-        if (navRSVP) navRSVP.classList.add('hidden');
-        // Only hide RSVP section on main page, not on dedicated RSVP page
-        if (rsvpSection && !isRSVPPage) rsvpSection.classList.add('hidden');
-    } else {
-        // Before wedding - hide photos section
-        if (photosSection) photosSection.classList.add('hidden');
-        if (navPhotos) navPhotos.classList.add('hidden');
+    // Photos visibility
+    if (photosSection) {
+        photosSection.classList.toggle('hidden', !visibility.showPhotosSection);
+    }
+    if (navPhotos) {
+        navPhotos.classList.toggle('hidden', !visibility.showPhotosNav);
+    }
 
-        // Hide RSVP nav if not open or within 6 weeks of wedding
-        if (currentDate >= sixWeeksBeforeWedding || rsvpOpen === false) {
-            if (navRSVP) navRSVP.classList.add('hidden');
-            // Only hide RSVP section on main page, not on dedicated RSVP page
-            if (rsvpSection && !isRSVPPage) rsvpSection.classList.add('hidden');
-        }
+    // RSVP visibility (nav is controlled everywhere, section only on main page)
+    if (navRSVP) {
+        navRSVP.classList.toggle('hidden', !visibility.showRsvpNav);
+    }
+    if (rsvpSection && !isRSVPPage) {
+        rsvpSection.classList.toggle('hidden', !visibility.showRsvpForm);
     }
 }
 
@@ -680,4 +709,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Optional: Check every hour if someone leaves the page open
-setInterval(checkPhotoUploadAvailability, 3600000);
+setInterval(updatePageVisibility, 3600000);
