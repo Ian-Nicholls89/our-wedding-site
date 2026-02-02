@@ -130,7 +130,8 @@
     // This runs after script.js loads so rsvpOpen variable is available
     function checkRSVPAvailability() {
         const weddingDate = new Date('2027-06-19');
-        const currentDate = new Date();
+        // TEST: Simulate being 3 weeks before wedding
+        const currentDate = new Date('2027-05-29');
         const sixWeeksBeforeWedding = new Date(weddingDate);
         sixWeeksBeforeWedding.setDate(weddingDate.getDate() - 42);
 
