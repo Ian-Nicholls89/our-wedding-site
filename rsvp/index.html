@@ -127,6 +127,7 @@
 
     <script>
     // Check RSVP availability and show appropriate content
+    // This runs after script.js loads so rsvpOpen variable is available
     function checkRSVPAvailability() {
         const weddingDate = new Date('2027-06-19');
         const currentDate = new Date();
@@ -159,8 +160,8 @@
         }
     }
 
-    // Run on page load
-    document.addEventListener('DOMContentLoaded', checkRSVPAvailability);
+    // Run after window fully loads (including script.js)
+    window.addEventListener('load', checkRSVPAvailability);
     </script>
 
     <!-- Footer -->
