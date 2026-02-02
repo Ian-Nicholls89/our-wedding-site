@@ -614,26 +614,45 @@ function showErrorMessage() {
 // Update page visibility based on wedding state
 function updatePageVisibility() {
     const visibility = getVisibility();
+    const navList = document.getElementById('navList');
 
     const photosSection = document.getElementById('photos');
-    const navPhotos = document.getElementById('navPhotos');
     const rsvpSection = document.getElementById('rsvp');
-    const navRSVP = document.getElementById('navRSVP');
 
     // Check if we're on the dedicated RSVP page
     const isRSVPPage = window.location.pathname.includes('/rsvp');
 
-    // Photos visibility
-    if (photosSection) {
-        photosSection.classList.toggle('hidden', !visibility.showPhotosSection);
-    }
-    if (navPhotos) {
-        navPhotos.classList.toggle('hidden', !visibility.showPhotosNav);
+    // Dynamically add/remove RSVP nav link
+    if (navList) {
+        let navRSVP = document.getElementById('navRSVP');
+        if (visibility.showRsvpNav) {
+            if (!navRSVP) {
+                navRSVP = document.createElement('li');
+                navRSVP.id = 'navRSVP';
+                navRSVP.innerHTML = '<a href="/rsvp">RSVP</a>';
+                navList.appendChild(navRSVP);
+            }
+        } else {
+            if (navRSVP) navRSVP.remove();
+        }
+
+        // Dynamically add/remove Photos nav link
+        let navPhotos = document.getElementById('navPhotos');
+        if (visibility.showPhotosNav) {
+            if (!navPhotos) {
+                navPhotos = document.createElement('li');
+                navPhotos.id = 'navPhotos';
+                navPhotos.innerHTML = '<a href="/photos">Photos</a>';
+                navList.appendChild(navPhotos);
+            }
+        } else {
+            if (navPhotos) navPhotos.remove();
+        }
     }
 
-    // RSVP visibility (nav is controlled everywhere, section only on main page)
-    if (navRSVP) {
-        navRSVP.classList.toggle('hidden', !visibility.showRsvpNav);
+    // Section visibility
+    if (photosSection) {
+        photosSection.classList.toggle('hidden', !visibility.showPhotosSection);
     }
     if (rsvpSection && !isRSVPPage) {
         rsvpSection.classList.toggle('hidden', !visibility.showRsvpForm);
