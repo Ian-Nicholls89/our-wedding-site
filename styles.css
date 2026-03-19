@@ -262,6 +262,19 @@ h2 {
     line-height: 1.6;
 }
 
+.detail-card a {
+    color: #2c7873;
+    text-decoration: none;
+    border-bottom: 1px solid #40b5ad;
+    font-weight: 500;
+    transition: color 0.3s, border-color 0.3s;
+}
+
+.detail-card a:hover {
+    color: #40b5ad;
+    border-bottom-color: #2c7873;
+}
+
 /* save the date button */
 button {
   font-family: inherit;
