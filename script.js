@@ -492,7 +492,7 @@ async function handleRsvp() {
         body: JSON.stringify({ name, attendance, numGuests, guestNames, dietaryRestrictions, dietaryDetails, mealSelections, stayingOvernight, accommodation, songRequest })
     };
 
-    const response = await fetch("http://localhost:5000/rsvp/submit", send);
+    const response = await fetch("https://api.aramnicholls.wedding/rsvp/submit", send);
     const data = await response.json();
 
     if (response.status === 200) {
