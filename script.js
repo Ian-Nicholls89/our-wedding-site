@@ -472,6 +472,9 @@ async function handleRsvp() {
                 if (r.checked) {
                     restrictions.push(r.value);
                 }
+                if (r.value === "other" && r.checked && dietaryDetails === undefined) {
+                    dietaryDetails = document.getElementById('dietaryDetails').value;
+                }
             }
 
             let res  = {};
