@@ -3,7 +3,7 @@
 // ============================================
 const WEDDING_CONFIG = {
     date: new Date('2027-06-19'),
-    rsvpOpen: false,
+    rsvpOpen: true,
     rsvpCloseDaysBeforeWedding: 42  // 6 weeks
 };
 
@@ -393,10 +393,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // RSVP Form submission
-    const rsvpForm = document.getElementById('rsvpForm');
-    if (rsvpForm) {
-        rsvpForm.addEventListener('submit', handleRSVPSubmit);
-    }
+    submitForm();
 });
 
 // Show/hide dietary details textarea based on "Other" checkbox selection
@@ -434,182 +431,80 @@ function toggleAccommodationQuestion() {
     }
 }
 
-// RSVP Form submission
-function handleRSVPSubmit(e) {
-    e.preventDefault();
+// ============================================
+// RSVP SUBMISSION
+// ============================================
 
-    // Validate dietary restrictions - at least one checkbox per person
-    const attendanceSelect = document.getElementById('attendance');
-    const guestsSelect = document.getElementById('guests');
-    const numGuests = parseInt(guestsSelect.value);
+function submitForm() {
+    const rsvpForm = document.getElementById('rsvpForm');
+    if (rsvpForm) {
+        rsvpForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleRsvp();
+        });
+    }
+}
 
-    if (attendanceSelect.value === 'yes' && numGuests > 0) {
-        let allValid = true;
-        let invalidGuests = [];
+async function handleRsvp() {
+    const name       = document.getElementById('name').value;
+    const attendance = document.getElementById('attendance').value;
+    let numGuests, guestNames, dietaryRestrictions, mealSelections, dietaryDetails, stayingOvernight, accommodation, songRequest;
+
+    if (attendance === "yes") {
+        numGuests        = Number(document.getElementById('guests').value);
+        guestNames       = Array.from(document.querySelectorAll('#guestNamesContainer input')).map(input => input.value);
+        dietaryDetails   = document.getElementById('dietaryDetails').value;
+        stayingOvernight = document.getElementById('stayingOvernight').value;
+        accommodation    = document.getElementById('accommodation').value;
+        songRequest      = document.getElementById('songRequest').value;
+
+        const dietaryRestrictionsTable = document.getElementById('dietaryRestrictionsTable');
+        const mealSelectionsTable      = document.getElementById('mealSelectionTable');
+        dietaryRestrictions = [];
+        mealSelections      = [];
 
         for (let i = 0; i < numGuests; i++) {
-            const checkboxes = document.querySelectorAll(`input[name^="dietary_${i}_"]`);
-            const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+            let resRow  = dietaryRestrictionsTable.rows[i + 1];
+            let mealRow = mealSelectionsTable.rows[i + 1];
+            let restrictions = [];
 
-            if (!anyChecked) {
-                allValid = false;
-                if (i === 0) {
-                    invalidGuests.push(document.getElementById('name').value);
-                } else {
-                    const guestNameInput = document.getElementById(`guestName_${i}`);
-                    const guestName = guestNameInput ? guestNameInput.value.trim() : '';
-                    invalidGuests.push(guestName || `Guest ${i}`);
+            for (let r of resRow.querySelectorAll('[name*="dietary_"]')) {
+                if (r.checked) {
+                    restrictions.push(r.value);
                 }
             }
-        }
 
-        if (!allValid) {
-            alert(`Please select at least one dietary option for: ${invalidGuests.join(', ')}`);
-            return;
+            let res  = {};
+            let meal = {};
+            let choice = mealRow.querySelector('input[type="radio"]:checked');
+
+            res[resRow.getElementsByClassName('guest-name-cell')[0].innerText]   = restrictions;
+            meal[mealRow.getElementsByClassName('guest-name-cell')[0].innerText] = choice ? choice.value : '';
+
+            dietaryRestrictions.push(res);
+            mealSelections.push(meal);
         }
     }
 
-    // Collect all form data
-    const formData = collectFormData();
-
-    // Submit to Google Apps Script
-    submitRSVP(formData, e.target);
-}
-
-// Collect all form data into structured object
-function collectFormData() {
-    const nameInput = document.getElementById('name');
-    const attendanceSelect = document.getElementById('attendance');
-    const guestsSelect = document.getElementById('guests');
-    const numGuests = parseInt(guestsSelect.value) || 0;
-
-    const data = {
-        name: nameInput.value.trim(),
-        attendance: attendanceSelect.value,
-        numGuests: numGuests,
-        guestNames: [],
-        dietary: {},
-        dietaryDetails: '',
-        meals: {},
-        stayingOvernight: '',
-        accommodation: '',
-        songRequest: ''
+    const send = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, attendance, numGuests, guestNames, dietaryRestrictions, dietaryDetails, mealSelections, stayingOvernight, accommodation, songRequest })
     };
 
-    // Only collect additional data if attending
-    if (data.attendance === 'yes' && numGuests > 0) {
-        // Collect guest names (excluding main person)
-        for (let i = 1; i < numGuests; i++) {
-            const guestNameInput = document.getElementById(`guestName_${i}`);
-            if (guestNameInput) {
-                data.guestNames.push(guestNameInput.value.trim());
-            }
-        }
+    const response = await fetch("http://localhost:5000/rsvp/submit", send);
+    const data = await response.json();
 
-        // Collect dietary restrictions
-        for (let i = 0; i < numGuests; i++) {
-            data.dietary[i] = {};
-            const checkboxes = document.querySelectorAll(`input[name^="dietary_${i}_"]`);
-            checkboxes.forEach(checkbox => {
-                if (checkbox.checked) {
-                    const restriction = checkbox.value;
-                    data.dietary[i][restriction] = true;
-                }
-            });
-        }
-
-        // Collect dietary details if "other" is selected
-        const dietaryDetailsInput = document.getElementById('dietaryDetails');
-        if (dietaryDetailsInput && dietaryDetailsInput.value.trim()) {
-            data.dietaryDetails = dietaryDetailsInput.value.trim();
-        }
-
-        // Collect meal selections
-        for (let i = 0; i < numGuests; i++) {
-            const mealRadios = document.querySelectorAll(`input[name="meal_${i}"]:checked`);
-            if (mealRadios.length > 0) {
-                data.meals[i] = mealRadios[0].value;
-            }
-        }
-
-        // Collect overnight/accommodation info
-        const stayingOvernightSelect = document.getElementById('stayingOvernight');
-        if (stayingOvernightSelect) {
-            data.stayingOvernight = stayingOvernightSelect.value;
-        }
-
-        const accommodationSelect = document.getElementById('accommodation');
-        if (accommodationSelect) {
-            data.accommodation = accommodationSelect.value;
-        }
-
-        // Collect song request
-        const songRequestInput = document.getElementById('songRequest');
-        if (songRequestInput) {
-            data.songRequest = songRequestInput.value.trim();
-        }
+    if (response.status === 200) {
+        document.getElementById("rsvpForm").reset();
     }
 
-    return data;
+    alert(data.message);
 }
 
-// Submit RSVP to Google Apps Script
-function submitRSVP(data, form) {
-    // TODO: Replace this URL with your deployed Google Apps Script web app URL
-    const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
-
-    // Check if URL has been configured
-    if (SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
-        alert('RSVP submission is not yet configured. Please check back soon or contact us directly.');
-        console.error('Google Apps Script URL not configured in script.js');
-        return;
-    }
-
-    // Disable submit button to prevent double submission
-    const submitButton = form.querySelector('button[type="submit"]');
-    const originalButtonText = submitButton.textContent;
-    submitButton.disabled = true;
-    submitButton.textContent = 'Submitting...';
-
-    // Submit to Google Apps Script
-    fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors', // Required for Google Apps Script
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-    })
-    .then(() => {
-        // Note: With no-cors mode, we can't read the response
-        // So we assume success if no error was thrown
-        showSuccessMessage(data);
-        form.reset();
-    })
-    .catch(error => {
-        console.error('Error submitting RSVP:', error);
-        showErrorMessage();
-    })
-    .finally(() => {
-        // Re-enable submit button
-        submitButton.disabled = false;
-        submitButton.textContent = originalButtonText;
-    });
-}
-
-// Show success message
-function showSuccessMessage(data) {
-    if (data.attendance === 'yes') {
-        alert(`Thank you for your RSVP, ${data.name}! We're thrilled that you'll be joining us with ${data.numGuests} guest(s). We can't wait to celebrate with you!`);
-    } else {
-        alert(`Thank you for your RSVP, ${data.name}. We're sorry you can't make it, but we appreciate you letting us know.`);
-    }
-}
-
-// Show error message
-function showErrorMessage() {
-    alert('Sorry, there was a problem submitting your RSVP. Please try again, or contact us directly if the problem persists.');
-}
+// ============================================
+// PAGE VISIBILITY
+// ============================================
 
 // Update page visibility based on wedding state
 function updatePageVisibility() {
@@ -659,7 +554,10 @@ function updatePageVisibility() {
     }
 }
 
-// Photo Upload Function
+// ============================================
+// PHOTO UPLOAD
+// ============================================
+
 function uploadPhotos() {
     const fileInput = document.getElementById('fileInput');
     const files = fileInput.files;
@@ -669,8 +567,6 @@ function uploadPhotos() {
         return;
     }
 
-    // Here you would implement actual file upload to your backend
-    // This is a placeholder that shows what the user selected
     alert(`Ready to upload ${files.length} photo(s).
 
 In production, you would integrate this with:
@@ -679,18 +575,7 @@ In production, you would integrate this with:
 - AWS S3
 - Or your preferred cloud storage solution`);
 
-    // Reset file input
     fileInput.value = '';
-
-    // In production, you might use something like:
-    // const formData = new FormData();
-    // for (let file of files) {
-    //     formData.append('photos', file);
-    // }
-    // fetch('/api/upload-photos', {
-    //     method: 'POST',
-    //     body: formData
-    // });
 }
 
 // Drag and drop functionality
