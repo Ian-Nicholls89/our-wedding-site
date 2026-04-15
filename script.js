@@ -453,7 +453,6 @@ async function handleRsvp() {
     if (attendance === "yes") {
         numGuests        = Number(document.getElementById('guests').value);
         guestNames       = Array.from(document.querySelectorAll('#guestNamesContainer input')).map(input => input.value);
-        dietaryDetails   = document.getElementById('dietaryDetails').value;
         stayingOvernight = document.getElementById('stayingOvernight').value;
         accommodation    = document.getElementById('accommodation').value;
         songRequest      = document.getElementById('songRequest').value;
@@ -495,14 +494,18 @@ async function handleRsvp() {
         body: JSON.stringify({ name, attendance, numGuests, guestNames, dietaryRestrictions, dietaryDetails, mealSelections, stayingOvernight, accommodation, songRequest })
     };
 
-    const response = await fetch("https://api.aramnicholls.wedding/rsvp/submit", send);
-    const data = await response.json();
+    try {
+        const response = await fetch("https://api.aramnicholls.wedding/rsvp/submit", send);
+        const data = await response.json();
 
-    if (response.status === 200) {
-        document.getElementById("rsvpForm").reset();
+        if (response.status === 200) {
+            document.getElementById("rsvpForm").reset();
+        }
+
+        alert(data.message);
+    } catch (error) {
+        alert("We couldn't reach the server - please try again or contact us directly.");
     }
-
-    alert(data.message);
 }
 
 // ============================================
